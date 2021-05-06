@@ -51,7 +51,7 @@ export default function Home() {
   const getBalance = async (user) => {
       await axios.post('https://chain.wax.io/v1/chain/get_currency_balance',
       {
-          "code": "alien.worlds",
+          "code": "alien.worlds"
           "code": "eosio.token",
           "account": user,
           "symbol": "TLM"
