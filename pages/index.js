@@ -54,7 +54,6 @@ export default function Home() {
           "code": "alien.worlds",
           "account": user,
           "symbol": "TLM"
-          "symbol": "WAM"
       }
       ).then(({data}) => {
         const newBalance = {...balance, [user]: data[0].slice(0,-4)+" TLM" }
