@@ -78,7 +78,7 @@ export default function Home() {
           "symbol": "WAX"
       }
       ).then(({data}) => {
-        const newBalance = {...balance, [user]: data[0].slice(0,-4)+" WAX" }
+        const newBalance = {...balancewax, [user]: data[0].slice(0,-4)+" WAX" }
         //console.log(newBalance)
         //console.log("will set bal")
         setBalance(newBalance)
