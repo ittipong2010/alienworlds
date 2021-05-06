@@ -15,12 +15,14 @@ export default function Home() {
 
   const defaultAcc = cookies.get("accounts") ? cookies.get("accounts") : []
   const defaultBal = cookies.get("balance") ? cookies.get("balance") : {}
+  const defaultBal = cookies.get("balancewax") ? cookies.get("balancewax") : {}
   const defaultCpu = cookies.get("cpu") ? cookies.get("cpu") : {}
   const defaultUpdate = cookies.get("lastUpdate") ? cookies.get("lastUpdate") : "None"
   const [account, setAccount] = useState(defaultAcc)
   const [input, setInput] = useState("")
   const [cpu, setCpu] = useState(defaultCpu)
   const [balance, setBalance] = useState(defaultBal)
+  const [balancewax, setBalancewax] = useState(defaultBal)
   const [update, setUpdate] = useState(defaultUpdate)
 
   const fetchCpuData = async (user) => {
@@ -70,6 +72,28 @@ export default function Home() {
   }
   
   
+  const getBalance = async (user) => {
+      await axios.post('https://chain.wax.io/v1/chain/get_currency_balance',
+      {
+          "code": "eosio.token",
+          "account": user,
+          "symbol": "WAX"
+      }
+      ).then(({data}) => {
+        const newBalancewax = {...balancewax, [user]: data[0].slice(0,-4)+" TLM" }
+        //console.log(newBalancewax)
+        //console.log("will set bal")
+        setBalancewax(newBalancewax)
+        cookies.set("balancewax", newBalancewax, cookieOptions)
+      }).catch((err) => {
+        const newBalancewax = {...balancewax, [user]: "ERROR WAX" }
+        //console.log(newBalancewax)
+        setBalance(newBalancewax)
+        cookies.set("balancewax", newBalancewax, cookieOptions)
+      })
+  }
+  
+  
  
 
   const handleAddAcc = (e) => {
@@ -86,12 +110,16 @@ export default function Home() {
     //console.log(newCpu)
     setCpu(newCpu)
     const newBalance = {...balance, [input]: "Loading..."}
+    const newBalancewax = {...balancewax, [input]: "Loading..."}
     //console.log(newBalance)
+     //console.log(newBalancewax)
     setBalance(newBalance)
+    setBalancewax(newBalancewax)
     let newAcc = [...account]
     newAcc.push(input)
     fetchCpuData(input)
     getBalance(input)
+    getBalancewax(input)
     setAccount(newAcc)
     setInput("")
     cookies.set("accounts", newAcc, cookieOptions)
@@ -101,26 +129,33 @@ export default function Home() {
     let newAcc = [...account].filter((arr) => arr != acc)
     const newCpu = {...cpu}
     const newBalance = {...balance, [acc]: "Loading..."}
+    const newBalancewax = {...balancewax, [acc]: "Loading..."}
     delete newCpu[acc]
     delete newBalance[acc]
+    delete newBalancewax[acc]
     //console.log(newAcc)
     setAccount(newAcc)
     setCpu(newCpu)
     setBalance(newBalance)
+    setBalancewax(newBalancewax)
     //console.log(newCpu)
     //console.log(newBalance)
+    //console.log(newBalancewax)
     cookies.set("accounts", newAcc, cookieOptions)
     cookies.set("balance", newBalance, cookieOptions)
+    cookies.set("balancewax", newBalancewax, cookieOptions)
     cookies.set("cpu", newCpu, cookieOptions)
   }
 
   const handleDeleteCookies = () => {
     cookies.remove("accounts")
     cookies.remove("balance")
+    cookies.remove("balancewax")
     cookies.remove("cpu")
     cookies.remove("lastUpdate")
     setAccount([])
     setBalance({})
+    setBalancewax({})
     setCpu({})
     setInput("")
     setUpdate("None")
@@ -133,9 +168,11 @@ export default function Home() {
         for(let acc of all) {
           console.log("Updating... "+acc)
           await getBalance(acc)
+          await getBalancewax(acc)
           await fetchCpuData(acc)
         }
         cookies.set("balance", balance, cookieOptions)
+        cookies.set("balancewax", balancewax, cookieOptions)
         cookies.set("cpu", cpu, cookieOptions)
         const updateTime = DateTime.now().setZone("local").setLocale("en-US").toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)
         console.log("Done! "+updateTime)
@@ -181,7 +218,7 @@ export default function Home() {
         <span className="text-lg font-bold text-center my-1 text-indigo-300">Data will automatically refresh every 30 secs</span>
         <span className="text-lg font-bold text-center my-1 text-indigo-300">Click at trash icon / wallet name to delete</span>
         <span className="text-center my-1">Last Update: {update}</span>
-        <AccountTable accounts={account} cpu={cpu} balance={balance} onDelete={handleDelete} />
+        <AccountTable accounts={account} cpu={cpu} balance={balance} balancewax={balancewax} onDelete={handleDelete} />
       </div>
     </div>
   )
