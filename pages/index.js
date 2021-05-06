@@ -15,7 +15,7 @@ export default function Home() {
 
   const defaultAcc = cookies.get("accounts") ? cookies.get("accounts") : []
   const defaultBal = cookies.get("balance") ? cookies.get("balance") : {}
-  const defaultBal = cookies.get("balancewax") ? cookies.get("balancewax") : {}
+  const defaultBalwax = cookies.get("balancewax") ? cookies.get("balancewax") : {}
   const defaultCpu = cookies.get("cpu") ? cookies.get("cpu") : {}
   const defaultUpdate = cookies.get("lastUpdate") ? cookies.get("lastUpdate") : "None"
   const [account, setAccount] = useState(defaultAcc)
