@@ -73,7 +73,7 @@ export default function Home() {
   
   
   const getBalancewax = async (user) => {
-      await axios.post('https://chain.wax.io/v1/chain/get_currency_balance',
+      await axios.post('https://api.waxsweden.org/v1/chain/get_currency_balance',
       {
           "code": "eosio.token",
           "account": user,
