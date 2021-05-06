@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 export default function AccountTable(props) {
-    const { accounts, onDelete, cpu, balance } = props
+    const { accounts, onDelete, cpu, balance,balancewax } = props
 
     return (
         <div className="flex flex-col w-full">
@@ -9,6 +9,7 @@ export default function AccountTable(props) {
             {accounts && accounts.map((acc, i) => {
                 const { used, available, max } = cpu[acc] ? cpu[acc] : { used: 0, available: 0, max: 0 }
                 const userBalance = balance[acc] ? balance[acc] : "Loading..."
+                const userBalancewax = balancewax[acc] ? balancewax[acc] : "Loading..."
                 const percent = max==0 ? "0%" : ((used/max)*100).toFixed(2)+"%"
                 return (
                     <div key={i} className="flex flex-col lg:flex-row gap-y-2 lg:gap-y-0 w-full my-3 items-center">
