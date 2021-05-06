@@ -68,6 +68,31 @@ export default function Home() {
         cookies.set("balance", newBalance, cookieOptions)
       })
   }
+  
+  
+  const getBalance = async (user) => {
+      await axios.post('https://chain.wax.io/v1/chain/get_currency_balance',
+      {
+          "code": "eosio.token",
+          "account": user,
+          "symbol": "WAX"
+      }
+      ).then(({data}) => {
+        const newBalance = {...balance, [user]: data[0].slice(0,-4)+" WAX" }
+        //console.log(newBalance)
+        //console.log("will set bal")
+        setBalance(newBalance)
+        cookies.set("balance", newBalance, cookieOptions)
+      }).catch((err) => {
+        const newBalance = {...balance, [user]: "ERROR TLM" }
+        //console.log(newBalance)
+        setBalance(newBalance)
+        cookies.set("balancewax", newBalance, cookieOptions)
+      })
+  }
+
+  
+  
 
   const handleAddAcc = (e) => {
     e.preventDefault()
@@ -178,7 +203,7 @@ export default function Home() {
         <span className="text-lg font-bold text-center my-1 text-indigo-300">Data will automatically refresh every 30 secs</span>
         <span className="text-lg font-bold text-center my-1 text-indigo-300">Click at trash icon / wallet name to delete</span>
         <span className="text-center my-1">Last Update: {update}</span>
-        <AccountTable accounts={account} cpu={cpu} balance={balance} onDelete={handleDelete} />
+        <AccountTable accounts={account} cpu={cpu} balance={balance} balance={balancewax} onDelete={handleDelete} />
       </div>
     </div>
   )
