@@ -203,7 +203,7 @@ export default function Home() {
         <span className="text-lg font-bold text-center my-1 text-indigo-300">Data will automatically refresh every 30 secs</span>
         <span className="text-lg font-bold text-center my-1 text-indigo-300">Click at trash icon / wallet name to delete</span>
         <span className="text-center my-1">Last Update: {update}</span>
-        <AccountTable accounts={account} cpu={cpu} balance={balance} balance={balancewax} onDelete={handleDelete} />
+        <AccountTable accounts={account} cpu={cpu} balance={balance} balancewax={balance} onDelete={handleDelete} />
       </div>
     </div>
   )
