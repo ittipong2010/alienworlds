@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 export default function AccountTable(props) {
-    const { accounts, onDelete, cpu, balance,balancewax } = props
+    const { accounts, onDelete, cpu, balance, balancewax } = props
 
     return (
         <div className="flex flex-col w-full">
